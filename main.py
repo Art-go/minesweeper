@@ -1,10 +1,21 @@
 import base64
 import json
+import os
 
 import pyglet
 
 import gen
 import sceneManager
+
+try:
+    with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats") as file:
+        pass
+    del file
+except:
+    os.mkdir(os.environ["USERPROFILE"] + "\\AMinesweeper")
+    with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "w") as file:
+        file.write("eyJ3aW5zIjogMCwgImxvc2luZyI6IDB9")
+    del file
 
 pyglet.font.add_file("comic.ttf")
 is_game_over = False
@@ -57,7 +68,7 @@ def main():
 
     def stats_scene():
         global wins_text, losing_text
-        with open("save.stats", "r") as f:
+        with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "r") as f:
             decoded_stats = json.loads(base64.b64decode(f.read().encode("ascii")).decode("ascii"))
         wins_text.text = f"Выйгрышей: {decoded_stats['wins']}"
         losing_text.text = f"Проигрышей: {decoded_stats['losing']}"
@@ -237,19 +248,19 @@ def main():
     def game_over():
         global is_game_over
         is_game_over = True
-        with open("save.stats", "r") as f:
+        with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "r") as f:
             decoded_stats = json.loads(base64.b64decode(f.read().encode("ascii")).decode("ascii"))
             decoded_stats["losing"] += 1
-        with open("save.stats", "w") as f:
+        with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "w") as f:
             f.write(base64.b64encode(json.dumps(decoded_stats).encode("ascii")).decode("ascii"))
 
     def game_win():
         global is_game_win
         is_game_win = True
-        with open("save.stats", "r") as f:
+        with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "r") as f:
             decoded_stats = json.loads(base64.b64decode(f.read().encode("ascii")).decode("ascii"))
             decoded_stats["wins"] += 1
-        with open("save.stats", "w") as f:
+        with open(os.environ["USERPROFILE"] + "\\AMinesweeper\\save.stats", "w") as f:
             f.write(base64.b64encode(json.dumps(decoded_stats).encode("ascii")).decode("ascii"))
 
     sm.add_scene(

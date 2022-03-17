@@ -4,6 +4,7 @@ import pyglet
 import random
 import base64
 import json
+import os
 
 setup(
     options={'py2exe': {'bundle_files': 1, 'compressed': True}},
